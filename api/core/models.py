@@ -1,5 +1,4 @@
 from django.db import models
-
 GLOBAL_GENRES = [('fiction','fiction'),('non-fiction','non-fiction')]
 
 
@@ -57,6 +56,8 @@ class Note(models.Model):
     review = models.TextField(blank = True)
     rate = models.IntegerField(blank = True, default = 0)
     created = models.DateTimeField(auto_now_add = True)
+    
+    owner = models.ForeignKey('auth.User', related_name='note', on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.related_paper}"    

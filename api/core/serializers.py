@@ -1,6 +1,15 @@
 from core.models import Note, Author, Book, SubGenre, PubInfo
 from rest_framework import serializers
 
+from django.contrib.auth.models import User
+
+class UserSerializer(serializers.ModelSerializer):
+    note = serializers.PrimaryKeyRelatedField(many=True,
+                                               queryset=Note.objects.all())
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'note']
+
 class PubInfoSerializer(serializers.ModelSerializer):
     class Meta: 
         model = PubInfo 
@@ -52,22 +61,23 @@ class BookSerializer(serializers.ModelSerializer):
 
 class NoteSerializer(serializers.ModelSerializer):
     related_paper = BookSerializer()
-    
+    owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta: 
         model = Note
-        fields = ['related_paper','review','rate']
+        fields = ['related_paper','review','rate','owner']
     
     def create(self, validated_data):
         review = validate_data.pop('review')
         rate = validate_data.pop('rate')
-
+        
         related_paper_data = validate_data.pop('related_paper')
         related_paper = BookSerizalizer.create(BookSerializer(),
                                                validated_data = realated_paper_data)
         note, created = Note.objects.update_or_create(
                 related_paper = related_paper,
                 review = review,
-                rate = rate
+                rate = rate,
                 )
         return note
 
