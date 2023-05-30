@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'core',
     'drf_yasg',
     'django_extensions',
+    'rest_registration',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,13 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+REST_REGISTRATION = {
+    'REGISTER_VERIFICATION_ENABLED': False,
+    'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
+    'RESET_PASSWORD_VERIFICATION_ENABLED': False,
+}
+
 
 ROOT_URLCONF = 'api.urls'
 
