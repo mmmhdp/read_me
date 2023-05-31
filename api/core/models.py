@@ -66,5 +66,8 @@ class Note(models.Model):
 
     owner = models.ForeignKey('auth.User', related_name='note', on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('related_paper', 'owner')
+
     def __str__(self):
         return f"{self.related_paper}"
